@@ -38,6 +38,7 @@ import com.owncloud.android.ui.activity.FileActivity
 import com.owncloud.android.ui.activity.OnEnforceableRefreshListener
 import com.owncloud.android.ui.fragment.FileFragment
 import com.owncloud.android.ui.helpers.FileOperationsHelper
+import java.lang.RuntimeException
 
 class TestActivity :
     FileActivity(),
@@ -101,7 +102,7 @@ class TestActivity :
 
     override fun getStorageManager(): FileDataStorageManager {
         if (!this::storage.isInitialized) {
-            storage = FileDataStorageManager(account, contentResolver)
+            storage = FileDataStorageManager(user.get(), contentResolver)
 
             if (!storage.capabilityExistsForAccount(account.name)) {
                 val ocCapability = OCCapability()
