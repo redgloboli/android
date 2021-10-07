@@ -674,7 +674,7 @@ public class DocumentsStorageProvider extends DocumentsProvider {
 
         ContentResolver contentResolver = getContext().getContentResolver();
 
-        for (Account account : accountManager.getAccounts()) {
+        for (User account : accountManager.getAllUsers()) {
             final FileDataStorageManager storageManager = new FileDataStorageManager(account, contentResolver);
             rootIdToStorageManager.put(account.hashCode(), storageManager);
         }

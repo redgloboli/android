@@ -30,6 +30,7 @@ import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.view.View;
 
+import com.nextcloud.client.account.User;
 import com.owncloud.android.MainApp;
 import com.owncloud.android.R;
 import com.owncloud.android.datamodel.FileDataStorageManager;
