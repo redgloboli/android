@@ -40,9 +40,11 @@ import com.owncloud.android.MainApp;
 import com.owncloud.android.datamodel.ArbitraryDataProvider;
 import com.owncloud.android.datamodel.FileDataStorageManager;
 import com.owncloud.android.datamodel.OCFile;
+import com.owncloud.android.lib.common.Action;
 import com.owncloud.android.lib.common.Creator;
 import com.owncloud.android.lib.common.DirectEditing;
 import com.owncloud.android.lib.common.Editor;
+import com.owncloud.android.lib.common.HoverCard;
 import com.owncloud.android.lib.common.OwnCloudAccount;
 import com.owncloud.android.lib.common.accounts.AccountTypeUtils;
 import com.owncloud.android.lib.common.accounts.AccountUtils;
@@ -54,6 +56,7 @@ import com.owncloud.android.lib.resources.users.StatusType;
 import com.owncloud.android.ui.activity.FileDisplayActivity;
 import com.owncloud.android.ui.fragment.OCFileListBottomSheetActions;
 import com.owncloud.android.ui.fragment.OCFileListBottomSheetDialog;
+import com.owncloud.android.ui.fragment.ProfileBottomSheetDialog;
 import com.owncloud.android.utils.MimeTypeUtil;
 import com.owncloud.android.utils.ScreenshotTest;
 
@@ -64,6 +67,7 @@ import org.junit.Test;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 
 import androidx.fragment.app.DialogFragment;
@@ -374,6 +378,52 @@ public class DialogFragmentIT extends AbstractIT {
         fda.runOnUiThread(sut::show);
 
         waitForIdleSync();
+
+        screenshot(sut.getWindow().getDecorView());
+    }
+
+    @Test
+    @ScreenshotTest
+    public void testProfileBottomSheet() {
+        if (Looper.myLooper() == null) {
+            Looper.prepare();
+        }
+
+        // Fixed values for HoverCard
+        List<Action> actions = new ArrayList<>();
+        actions.add(new Action("profile",
+                               "View profile",
+                               "https://dev.nextcloud.com/core/img/actions/mail.svg", // TODO change
+                               "https://dev.nextcloud.com/u/christine")); // TODO change
+        actions.add(new Action("core",
+                               "christine.scott@nextcloud.com",
+                               "https://dev.nextcloud.com/core/img/actions/mail.svg",
+                               "mailto:christine.scott@nextcloud.com"));
+
+        actions.add(new Action("spreed",
+                               "Talk to Christine",
+                               "https://dev.nextcloud.com/apps/spreed/img/app-dark.svg",
+                               "https://dev.nextcloud.com/apps/spreed/?callUser=christine"
+        ));
+
+        HoverCard hoverCard = new HoverCard();
+        hoverCard.userId = "christine";
+        hoverCard.displayName = "Christine Scott";
+        hoverCard.actions = actions;
+
+        // show dialog
+        Intent intent = new Intent(targetContext, FileDisplayActivity.class);
+        FileDisplayActivity fda = activityRule.launchActivity(intent);
+
+        ProfileBottomSheetDialog sut = new ProfileBottomSheetDialog(fda,
+                                                                    user,
+                                                                    hoverCard);
+
+        fda.runOnUiThread(sut::show);
+
+        waitForIdleSync();
+
+        longSleep();
 
         screenshot(sut.getWindow().getDecorView());
     }

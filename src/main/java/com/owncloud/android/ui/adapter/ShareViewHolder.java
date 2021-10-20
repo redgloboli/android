@@ -29,10 +29,16 @@ import android.widget.ImageView;
 import com.nextcloud.client.account.User;
 import com.owncloud.android.R;
 import com.owncloud.android.databinding.FileDetailsShareShareItemBinding;
+import com.owncloud.android.lib.common.Action;
+import com.owncloud.android.lib.common.HoverCard;
 import com.owncloud.android.lib.resources.shares.OCShare;
 import com.owncloud.android.ui.TextDrawable;
+import com.owncloud.android.ui.activity.FileActivity;
+import com.owncloud.android.ui.fragment.ProfileBottomSheetDialog;
 import com.owncloud.android.utils.DisplayUtils;
 import com.owncloud.android.utils.theme.ThemeAvatarUtils;
+
+import java.util.ArrayList;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
@@ -59,7 +65,8 @@ class ShareViewHolder extends RecyclerView.ViewHolder {
                      ShareeListAdapterListener listener,
                      DisplayUtils.AvatarGenerationListener avatarListener,
                      String userId,
-                     float avatarRadiusDimension) {
+                     float avatarRadiusDimension,
+                     FileActivity fileActivity) {
         this.avatarRadiusDimension = avatarRadiusDimension;
         String name = share.getSharedWithDisplayName();
         binding.icon.setTag(null);
@@ -91,6 +98,32 @@ class ShareViewHolder extends RecyclerView.ViewHolder {
                                        context.getResources(),
                                        binding.icon,
                                        context);
+
+                binding.icon.setOnClickListener(v -> {
+                    // Fixed values for HoverCard
+                    ArrayList<Action> actions = new ArrayList<>();
+                    actions.add(new Action("profile",
+                                           "View profile",
+                                           "https://dev.nextcloud.com/core/img/actions/mail.svg", // TODO change
+                                           "https://dev.nextcloud.com/u/christine")); // TODO change
+                    actions.add(new Action("core",
+                                           "christine.scott@nextcloud.com",
+                                           "https://dev.nextcloud.com/core/img/actions/mail.svg",
+                                           "mailto:christine.scott@nextcloud.com"));
+
+                    actions.add(new Action("spreed",
+                                           "Talk to Christine",
+                                           "https://dev.nextcloud.com/apps/spreed/img/app-dark.svg",
+                                           "https://dev.nextcloud.com/apps/spreed/?callUser=christine"
+                    ));
+
+                    HoverCard hoverCard = new HoverCard();
+                    hoverCard.userId = "admin";
+                    hoverCard.displayName = "Christine Scott";
+                    hoverCard.actions = actions;
+
+                    new ProfileBottomSheetDialog(fileActivity, user, hoverCard).show();
+                });
             default:
                 setImage(binding.icon, name, R.drawable.ic_user);
                 break;
