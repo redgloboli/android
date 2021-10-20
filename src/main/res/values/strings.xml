@@ -661,7 +661,9 @@
     <string name="link">Link</string>
 
     <string name="notification_channel_upload_name">Upload notification channel</string>
+    <string name="notification_channel_upload_name_2">Uploads</string>
     <string name="notification_channel_download_name">Download notification channel</string>
+    <string name="notification_channel_download_name_2">Downloads</string>
     <string name="notification_channel_download_description">Shows download progress</string>
     <string name="notification_channel_upload_description">Shows upload progress</string>
     <string name="notification_channel_media_name">Media player</string>
